@@ -1,0 +1,75 @@
+{% extends "auctions/layout.html" %}
+
+{% block style %}
+<style>
+    #listings {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .listing {
+        display: flex;
+        border: 1px solid black;
+        gap: 50px;
+        padding: 20px;
+    }
+
+    .listing:hover {
+        border: 2px solid black;
+        box-shadow: 3px 5px 15px 1px hsla(0, 0%, 0%, 0.5);
+        cursor: pointer;
+    }
+
+    .image img {
+        width: 200px;
+        height: auto;
+        aspect-ratio: 1/1;
+        object-fit: cover;
+    }
+
+    .details {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        justify-content: space-between;
+    }
+</style>
+{% endblock %}
+
+{% block logic %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const listings = document.querySelectorAll(".listing");
+        listings.forEach(listing => {
+            listing.addEventListener("click", function () {
+                let id = listing.querySelector(".id").innerHTML;
+                if (id) {
+                    window.location.href = `/${id}`;
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}
+
+{% block body %}
+<h2>Watchlist</h2>
+
+<div id="listings">
+    {% for watchlisted in watchlist %}
+    <div class="listing">
+        <div class="image">
+            <img src="{{ watchlisted.listing.image.url }}" alt="listing-image">
+        </div>
+        <div class="details">
+            <h3>{{ watchlisted.listing.title }}</h3>
+            <p>Price: ${{ watchlisted.listing.highest_bid.price }}</p>
+            <p>{{ watchlisted.listing.description }}</p>
+            <p>{{ watchlisted.listing.category }}</p>
+        </div>
+        <div class="id" hidden>{{ watchlisted.listing.listing_id }}</div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

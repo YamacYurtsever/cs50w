@@ -1,0 +1,28 @@
+{% extends "network/layout.html" %} {% load static %} {% block body %}
+<h1>All Posts</h1>
+
+{% if user.is_authenticated %}
+<div class="post" id="new-post">
+	<h4>New Post</h4>
+	<form action="{% url 'index' %}" method="post">
+		{% csrf_token %}
+		<textarea name="content" rows="3"></textarea>
+		<button class="post-button" type="submit">Post</button>
+	</form>
+</div>
+{% endif %}
+
+<div id="posts"></div>
+
+<div id="pagination-buttons">
+	<button id="prev-button" onclick="loadPrev()">Previous</button>
+	<p id="page-num">1</p>
+	<button id="next-button" onclick="loadNext()">Next</button>
+</div>
+{% endblock %} {% block logic %}
+<script>
+	let requestUser = "{{ request.user.id }}";
+	const type = "all";
+</script>
+<script src="{% static 'network/postManager.js' %}"></script>
+{% endblock %}

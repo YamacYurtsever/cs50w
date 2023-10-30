@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Search</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link href="style.css" rel="stylesheet" type="text/css" />
+
+	<script>
+		function submitForm(input) {
+			const form = document.querySelector("form");
+			if (input == document.querySelector("#lucky")) {
+				const btnIInput = document.createElement("input");
+				btnIInput.type = "hidden";
+				btnIInput.name = "btnI";
+				btnIInput.value = "I'm Feeling Lucky";
+				form.appendChild(btnIInput);
+			}
+			form.submit();
+		}
+	</script>
+</head>
+
+<body>
+	<div id="links">
+		<a href="image.html">Image Search</a>
+		<a href="advanced.html">Advanced Search</a>
+	</div>
+
+	<form action="https://www.google.com/search">
+		<input type="text" name="q" id="query" placeholder="Search" />
+		<div id="buttons">
+			<input type="button" value="Google Search" onclick="submitForm(this)" />
+			<input type="button" value="I'm Feeling Lucky" onclick="submitForm(this)" id="lucky" />
+		</div>
+	</form>
+</body>
+
+</html>

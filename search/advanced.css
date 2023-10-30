@@ -1,0 +1,29 @@
+form {
+	display: block;
+}
+
+h3 {
+	margin-bottom: 3vh;
+}
+
+.row {
+	display: flex;
+	margin-bottom: 2vh;
+	align-items: center;
+}
+
+.description {
+	width: 250px;
+}
+
+.row input {
+	width: 37.5vw;
+	height: 3rem;
+}
+
+input[type="submit"] {
+	background-color: #4d90fe;
+	border: 1px solid #3079ed;
+	color: white;
+	margin-top: 2vh;
+}

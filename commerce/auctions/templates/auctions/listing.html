@@ -1,0 +1,124 @@
+{% extends "auctions/layout.html" %}
+
+{% block style %}
+<style>
+    .listing>* {
+        margin-bottom: 20px;
+    }
+
+    img {
+        width: auto;
+        height: 275px;
+    }
+
+    #bidding {
+        padding: 10px;
+        border: 1px solid black;
+        width: 300px;
+    }
+
+    textarea {
+        display: block;
+        width: 500px;
+        margin-bottom: 20px;
+        padding: 10px;
+    }
+
+    .comment {
+        width: 500px;
+        border: 1px solid black;
+        padding: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block logic %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const highestBidPrice = parseInt(document.querySelector('input[name="highestBidPrice"]').value);
+        const bidPriceInput = document.querySelector('input[name="price"]');
+        bidPriceInput.min = highestBidPrice + 1;
+    });
+</script>
+{% endblock %}
+
+{% block body %}
+<div class="listing">
+    <h1>Listing: {{ listing.title }}</h1>
+
+    {% if request.user.is_authenticated %}
+    <form action="{% url 'watchlist' %}" , method="post">
+        {% csrf_token %}
+        <input name="id" value="{{ listing.listing_id }}" hidden>
+        {% if isWatchlisted %}
+        <button>Remove From Watchlist</button>
+        {% else %}
+        <button>Add to Watchlist</button>
+        {% endif %}
+    </form>
+    {% endif %}
+
+    <img src="{{ listing.image.url }}" alt="listing-image">
+    <p>{{ listing.description }}</p>
+
+    <div id="bidding">
+        {% if listing.closed == False %}
+        <h3>${{ listing.highest_bid.price }}</h3>
+        <p>{{ listing.bid_count }} bid(s) so far.</p>
+        {% if listing.bid_count > 0 %}
+        {% if listing.highest_bid.user == request.user %}
+        <p>Your bid is the current bid</p>
+        {% else %}
+        <p>{{ listing.highest_bid.user }}'s bid is the current bid</p>
+        {% endif %}
+        {% endif %}
+        {% if request.user.is_authenticated %}
+        {% if not request.user == listing.user %}
+        <form action="{% url 'bid' %}" , method="post">
+            {% csrf_token %}
+            <input name="id" value="{{ listing.listing_id }}" hidden>
+            <input name="highestBidPrice" value="{{ listing.highest_bid.price }}" hidden>
+            <input name="price" placeholder="Bid: " type="number" required>
+            <button type="submit">Place Bid</button>
+        </form>
+        {% else %}
+        <form action="{% url 'close' %}" , method="post">
+            {% csrf_token %}
+            <input name="id" value="{{ listing.listing_id }}" hidden>
+            <button>Close Auction</button>
+        </form>
+        {% endif %}
+        {% endif %}
+        {% else %}
+        {% if request.user == listing.highest_bid.user %}
+        <h5>You won the auction!</h5>
+        {% else %}
+        <h5>{{ listing.highest_bid.user }} won the auction!</h5>
+        {% endif %}
+        {% endif %}
+    </div>
+
+    <h5>Details</h5>
+    <ul>
+        <p>Listed by: {{ listing.user }}</p>
+        <p>Category: {{ listing.category }}</p>
+    </ul>
+
+    <h5>Comments</h5>
+    {% for comment in comments %}
+    <div class="comment">
+        <h6>{{ comment.user }}</h6>
+        <hr>
+        <p>{{ comment.content }}</p>
+    </div>
+    {% endfor %}
+    {% if request.user.is_authenticated %}
+    <form action="{% url 'comment' %}" method="post">
+        {% csrf_token %}
+        <input name="id" value="{{ listing.listing_id }}" hidden>
+        <textarea name="content" placeholder="Add Comment:" rows="3" maxlength="500"></textarea>
+        <button type="submit">Submit</button>
+    </form>
+    {% endif %}
+</div>
+{% endblock %}

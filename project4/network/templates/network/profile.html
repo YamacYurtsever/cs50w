@@ -1,0 +1,83 @@
+{% extends "network/layout.html" %} {% load static %} {% block body %}
+<h2>{{ username }}</h2>
+<div id="details">
+	<div class="details-col">
+		<p id="followers-count">{{ followers.count }}</p>
+		<p>Followers</p>
+	</div>
+	<div class="details-col">
+		<p id="following-count">{{ following.count }}</p>
+		<p>Following</p>
+	</div>
+	{% if user.username != username and user.is_authenticated %}
+	<div class="details-col">
+		{% if not user in followers %}
+		<button data-follow="true" onclick="toggleFollow(this)" class="follow-button">Follow</button>
+		{% else %}
+		<button data-follow="false" onclick="toggleFollow(this)" class="unfollow-button">Following</button>
+		{% endif %}
+	</div>
+	{% endif %}
+</div>
+
+<h2>Posts</h2>
+<div id="posts"></div>
+
+<div id="pagination-buttons">
+	<button id="prev-button" onclick="loadPrev()">Previous</button>
+	<p id="page-num">1</p>
+	<button id="next-button" onclick="loadNext()">Next</button>
+</div>
+{% endblock %} {% block logic %}
+<script>
+	function toggleFollow(button) {
+		fetch("/toggle_follow", {
+			method: "POST",
+			body: JSON.stringify({
+				userFollowed: "{{ username }}",
+				userFollowing: "{{ user.username }}",
+			}),
+		})
+			.then((response) => {
+				return response.json();
+			})
+			.then((result) => {
+				console.log(result);
+
+				if (button.dataset.follow == "true") {
+					button.classList.remove("follow-button");
+					button.classList.remove("follow-button-animator");
+					button.classList.add("unfollow-button");
+					button.classList.add("unfollow-button-animator");
+					button.dataset.follow = "false";
+
+					setTimeout(() => {
+						button.innerHTML = "Following";
+					}, 500);
+
+					followersCount = parseInt(document.querySelector("#followers-count").innerHTML);
+					document.querySelector("#followers-count").innerHTML = followersCount + 1;
+				} else {
+					button.classList.remove("unfollow-button");
+					button.classList.remove("unfollow-button-animator");
+					button.classList.add("follow-button");
+					button.classList.add("follow-button-animator");
+					button.dataset.follow = "true";
+
+					setTimeout(() => {
+						button.innerHTML = "Follow";
+					}, 500);
+
+					followersCount = parseInt(document.querySelector("#followers-count").innerHTML);
+					document.querySelector("#followers-count").innerHTML = followersCount - 1;
+				}
+			});
+	}
+</script>
+<script>
+	let requestUser = "{{ request.user.id }}";
+	const type = "profile";
+	let username = "{{ username }}";
+</script>
+<script src="{% static 'network/postManager.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,219 @@
+:root {
+	--screen-width: 900px;
+}
+
+*,
+*::before,
+*::after {
+	margin: 0;
+	padding: 0;
+}
+
+p,
+h4 {
+	margin-bottom: 0;
+}
+
+.body {
+	font-size: 62.5%;
+	padding: 30px;
+	box-sizing: border-box;
+}
+
+h1 {
+	margin-bottom: 20px;
+}
+
+/* INDEX */
+
+.post {
+	width: var(--screen-width);
+	margin: auto;
+	border: 1px solid gray;
+	border-radius: 5px;
+	padding: 20px;
+	font-size: 1.3rem;
+	margin-bottom: 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	justify-content: space-between;
+}
+
+.post form {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+.edit {
+	display: inline-block;
+	color: turquoise;
+}
+
+.clickable:hover {
+	font-weight: 600;
+	cursor: pointer;
+}
+
+.username {
+	display: inline-block;
+}
+
+.username a {
+	color: black;
+	text-decoration: none;
+}
+
+.username:hover {
+	font-weight: 700;
+	cursor: pointer;
+}
+
+.datetime,
+.likes {
+	color: grey;
+}
+
+textarea {
+	padding: 20px;
+	font-size: 1.2rem;
+	display: block;
+	width: 100%;
+}
+
+.post-button {
+	width: 100px;
+	height: 40px;
+	font-size: 1.2rem;
+	background-color: darkcyan;
+	color: white;
+}
+
+@keyframes new-post-button-hover {
+	0% {
+		transform: rotate(0);
+	}
+
+	25% {
+		transform: rotate(10deg);
+	}
+
+	75% {
+		transform: rotate(-10deg);
+	}
+
+	100% {
+		transform: rotate(0);
+	}
+}
+
+#new-post form button:hover {
+	animation-name: new-post-button-hover;
+	animation-duration: 0.33s;
+}
+
+#pagination-buttons {
+	width: var(--screen-width);
+	margin: auto;
+	display: block;
+	height: 50px;
+	position: relative;
+}
+
+#pagination-buttons button {
+	width: 150px;
+	padding: 7px;
+	font-size: 1.2rem;
+	height: 50px;
+	border-radius: 30px;
+}
+
+#prev-button {
+	float: left;
+	display: none;
+}
+
+#next-button {
+	float: right;
+}
+
+#page-num {
+	text-align: center;
+	font-size: 1.6rem;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+/* PROFILE */
+
+h2 {
+	text-align: center;
+	margin-bottom: 30px;
+}
+
+#details {
+	width: var(--screen-width);
+	height: 50px;
+	margin: auto;
+	display: flex;
+	justify-content: space-evenly;
+	align-items: center;
+	font-size: 1.2rem;
+	margin-bottom: 50px;
+}
+
+.details-col {
+	text-align: center;
+	width: 100px;
+}
+
+.details-col * {
+	margin: 0;
+}
+
+.details-col button {
+	width: 100px;
+	border-radius: 10px;
+	padding: 7px;
+}
+
+@keyframes follow-animation {
+	from {
+		transform: rotate(0deg);
+		background-color: turquoise;
+	}
+	to {
+		transform: rotate(-360deg);
+		background-color: white;
+	}
+}
+
+@keyframes unfollow-animation {
+	from {
+		transform: rotate(0deg);
+		background-color: white;
+	}
+	to {
+		transform: rotate(-360deg);
+		background-color: turquoise;
+	}
+}
+
+.follow-button {
+	background-color: turquoise;
+}
+
+.follow-button-animator {
+	animation: unfollow-animation 0.5s forwards;
+}
+
+.unfollow-button {
+	background-color: white;
+}
+
+.unfollow-button-animator {
+	animation: follow-animation 0.5s forwards;
+}

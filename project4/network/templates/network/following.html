@@ -1,0 +1,17 @@
+{% extends "network/layout.html" %} {% load static %} {% block body %}
+<h1>Following</h1>
+
+<div id="posts"></div>
+
+<div id="pagination-buttons">
+	<button id="prev-button" onclick="loadPrev()">Previous</button>
+	<p id="page-num">1</p>
+	<button id="next-button" onclick="loadNext()">Next</button>
+</div>
+{% endblock %} {% block logic %}
+<script>
+	let requestUser = "{{ request.user.id }}";
+	const type = "following";
+</script>
+<script src="{% static 'network/postManager.js' %}"></script>
+{% endblock %}
